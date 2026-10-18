@@ -31,6 +31,7 @@ def root():
 
 
 @app.post("/orders")
+@app.post("/orders/orders")
 def create_order(
     idempotency_key: Optional[str] = Header(default=None, alias="Idempotency-Key"),
 ):
@@ -58,6 +59,7 @@ def create_order(
 
 
 @app.get("/orders")
+@app.get("/orders/orders")
 def list_orders(
     limit: int = Query(default=10, ge=1),
     cursor: Optional[str] = Query(default=None),
@@ -92,7 +94,7 @@ def list_orders(
 async def rate_limit_middleware(request: Request, call_next):
     client_id = request.headers.get("X-Client-Id")
 
-    if client_id and request.url.path.startswith("/orders"):
+    if client_id and request.url.path in ("/orders", "/orders/orders"):
         now = time.time()
         bucket = rate_limit_store[client_id]
 
