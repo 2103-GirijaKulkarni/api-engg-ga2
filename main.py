@@ -16,13 +16,12 @@ app = FastAPI(title="Orders API")
 # CORS: allow the grading page/browser to call this API.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
+    allow_origin_regex=".*",
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
     expose_headers=["Retry-After"],
 )
-
 # -------------------------
 # 1. Idempotent POST /orders
 # -------------------------
